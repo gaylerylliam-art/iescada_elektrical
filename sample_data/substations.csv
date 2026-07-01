@@ -1,0 +1,3 @@
+id,name,region,latitude,longitude,voltage_level_kv,rated_mva,allowable_mva,rated_current_a,transformer_ratings_mva,feeder_ratings_mva
+ss-demo-11,Demo Valley 66,North,1.391,103.801,66,80,80,720,40;40,15;17;18
+ss-demo-12,Demo Coast 132,South,1.251,103.841,132,140,140,980,70;70,24;26;28
