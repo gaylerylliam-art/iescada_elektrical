@@ -7,3 +7,4 @@ coverage/
 .DS_Store
 .push_checkout_*/
 .netlify_deploy_package_*/
+.netlify/
