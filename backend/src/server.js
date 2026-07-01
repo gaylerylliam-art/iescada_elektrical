@@ -11,9 +11,10 @@ import { generateAlarms } from "./services/alarms.js";
 import { requireAuth, requireRole, signToken } from "./middleware/auth.js";
 import { parseCsv } from "./utils/csv.js";
 
-const app = express();
+export const app = express();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 2 * 1024 * 1024 } });
 const connector = createConnector(config.telemetrySource, config);
+let telemetryStarted = false;
 
 app.use(helmet());
 app.use(cors({ origin: true, credentials: true }));
@@ -159,7 +160,7 @@ function parseRatings(value, prefix) {
   }));
 }
 
-async function ingestOnce() {
+export async function ingestOnce() {
   const substations = store.listSubstations();
   try {
     const rawTelemetry = await connector.readTelemetry(substations);
@@ -177,10 +178,17 @@ async function ingestOnce() {
   }
 }
 
-await connector.connect();
-await ingestOnce();
-setInterval(ingestOnce, config.telemetryPollMs);
+export async function initializeTelemetry({ poll = false } = {}) {
+  if (telemetryStarted) return;
+  telemetryStarted = true;
+  await connector.connect();
+  await ingestOnce();
+  if (poll) setInterval(ingestOnce, config.telemetryPollMs);
+}
 
-app.listen(config.port, () => {
-  console.log(`Substation Capacity Monitoring API listening on http://localhost:${config.port}`);
-});
+if (process.argv[1] && import.meta.url === new URL(`file:///${process.argv[1].replace(/\\/g, "/")}`).href) {
+  await initializeTelemetry({ poll: true });
+  app.listen(config.port, () => {
+    console.log(`Substation Capacity Monitoring API listening on http://localhost:${config.port}`);
+  });
+}

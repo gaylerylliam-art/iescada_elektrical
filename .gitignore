@@ -5,3 +5,5 @@ dist/
 coverage/
 *.log
 .DS_Store
+.push_checkout_*/
+.netlify_deploy_package_*/

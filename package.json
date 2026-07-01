@@ -2,6 +2,7 @@
   "name": "substation-capacity-monitoring-system",
   "private": true,
   "version": "0.1.0",
+  "type": "module",
   "description": "Monitoring-only full-stack dashboard for electrical substation capacity and telemetry.",
   "scripts": {
     "dev": "concurrently \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
@@ -11,5 +12,8 @@
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7"
   }
 }

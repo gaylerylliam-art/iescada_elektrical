@@ -22,7 +22,7 @@ export function requireRole(roles) {
   };
 }
 
-function verifyToken(token) {
+export function verifyToken(token) {
   if (!token || !token.includes(".")) return null;
   const [body, signature] = token.split(".");
   const expected = crypto.createHmac("sha256", config.jwtSecret).update(body).digest("base64url");
